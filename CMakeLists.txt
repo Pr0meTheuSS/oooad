@@ -9,7 +9,7 @@ find_package(fmt REQUIRED)
 find_package(GTest REQUIRED)
 
 # Рекурсивно собираем cpp из src/
-file(GLOB_RECURSE SRC_FILES CONFIGURE_DEPENDS src/*.cpp)
+file(GLOB_RECURSE SRC_FILES CONFIGURE_DEPENDS src/*.cpp main.cpp)
 
 add_executable(${PROJECT_NAME} ${SRC_FILES})
 
