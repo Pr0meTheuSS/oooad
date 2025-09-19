@@ -1,8 +1,15 @@
 #pragma once
 
-#include "Processor.hpp"
+#include <string>
 
-class CubeProcessor final : Processor {
+#include "Processor.hpp"
+#include "ProcessorRegistar.hpp"
+
+constexpr const std::string cubeFactoryName{"cube"};
+class CubeProcessor final : public Processor {
 public:
   double process(double value) override;
+
+private:
+  static inline ProcessorRegistrar<CubeProcessor> reg{cubeFactoryName};
 };
