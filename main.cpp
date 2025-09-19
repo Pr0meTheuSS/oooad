@@ -10,9 +10,12 @@ int main() {
   double value = 0.0;
   std::cin >> value;
 
-  double square = SquareProcessor::calcSquare(value);
+  SquareProcessor squareProcessor;
+  Processor &processor = squareProcessor;
+
+  double result = processor.process(value);
   fmt::print("Исходное значение: {0:.2f} квадрат значения: {1:.2f}\n", value,
-             square);
+             result);
 
   return EXIT_SUCCESS;
 }

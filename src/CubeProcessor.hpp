@@ -2,7 +2,7 @@
 
 #include "Processor.hpp"
 
-class SquareProcessor final : public Processor {
+class CubeProcessor final : Processor {
 public:
   double process(double value) override;
 };

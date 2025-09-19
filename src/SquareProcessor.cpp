@@ -1,3 +1,3 @@
 #include "SquareProcessor.hpp"
 
-double SquareProcessor::calcSquare(double value) { return value * value; }
+double SquareProcessor::process(double value) { return value * value; }
