@@ -9,6 +9,7 @@ foreach(test_src ${TEST_SRCS})
             fmt::fmt
             GTest::gtest
             GTest::gtest_main
+            CLI11::CLI11
     )
     add_test(NAME ${test_name} COMMAND ${test_name})
 endforeach()

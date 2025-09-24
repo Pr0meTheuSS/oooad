@@ -5,9 +5,9 @@ set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Conan find_package
-find_package(fmt REQUIRED)
-find_package(GTest REQUIRED)
-find_package(CLI11 REQUIRED)
+find_package(fmt CONFIG REQUIRED)
+find_package(GTest CONFIG REQUIRED)
+find_package(CLI11 CONFIG REQUIRED)
 
 # Рекурсивно собираем cpp из src/
 file(GLOB_RECURSE SRC_FILES CONFIGURE_DEPENDS src/*.cpp main.cpp)
