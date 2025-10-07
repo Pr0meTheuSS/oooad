@@ -606,8 +606,7 @@ stop
 ---
 
 ## 9. Диаграмма классов UI → Service → Repo → Domain
-![alt text](image-11.png)
-
+![alt text](image-12.png)
 ```plantuml
 @startuml
 package ui {
@@ -679,6 +678,11 @@ package domain {
     - createdAt : LocalDateTime
     - cancelledBy : String
   }
+  enum Role {
+		USER,
+		ADMIN
+	}
+
   enum BookingStatus {
 		ACTIVE,
 		CANCELED
@@ -692,7 +696,8 @@ AuthService --> UserRepository
 RoomService --> RoomRepository
 BookingService --> BookingRepository
 BookingService --> RoomRepository
-BookingRepository --> Booking
+Booking --> BookingStatus
+User --> Role
 @enduml
 ```
 
