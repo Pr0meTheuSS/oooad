@@ -122,54 +122,7 @@ Enum’ы (Role, BookingStatus) и их поведение.
 
 ![alt text](image.png)
 
-<details>
-  <summary>**Sequence** (plantUML)</summary>
-```plantuml
-@startuml
-actor User
-participant "Console UI" as UI
-participant "AuthService" as Auth
-participant "UserRepo" as Repo
-User -> UI: enter login
-UI -> Auth: login(login)
-Auth -> Repo: findUser(login)
-alt user exists
-    Repo --> Auth: User
-    Auth --> UI: success
-    UI -> User: show "Logged in"
-else not found
-    Repo --> Auth: null
-    Auth --> UI: error
-    UI -> User: show "Login failed"
-end
-@enduml
-```
-</details>
-
 ![alt text](image-1.png)
-
-<details>
-  <summary>**Activity** (plantUML)</summary>
-```plantuml
-@startuml
-  start
-  :Read login;
-  if (empty?) then (yes)
-    :Show error;
-    stop
-  else (no)
-    :findUser(login);
-    if (exists?) then (yes)
-      :Create session;
-      :Show success;
-    else (no)
-      :Show error;
-    endif
-  endif
-  stop
-@enduml
-```
-</details>
 
 --- 
 
@@ -184,43 +137,7 @@ ROOMS:
 ```
 ![alt text](image-2.png)
 
-<details>
-  <summary>**Sequence** (plantUML)</summary>
-
-```plantuml
-@startuml
-  actor User
-  participant UI
-  participant RoomService as RS
-  participant RoomRepo as RR
-
-    User -> UI: list-rooms
-    UI -> RS: getRooms()
-    RS -> RR: fetchAll()
-    RR --> RS: rooms
-    RS --> UI: rooms
-    UI -> User: display list
-@enduml
-```
-</details>
-
 ![alt text](image-3.png)
-<details>
-  <summary>**Activity** (plantUML)</summary>
-```plantuml
-@startuml
-  start
-    :Select list-rooms;
-    :Fetch rooms;
-    if (empty) then (yes)
-      :Show "No rooms";
-    else (no)
-      :Display rooms;
-    endif
-  stop
-@enduml
-```
-</details>
 
 --- 
 ### US-3: View Slots 
@@ -257,44 +174,6 @@ UI -> User: display
 
 ![alt text](image-4.png)
 
-<details>
-  <summary> **Activity** (plantUML) </summary>
-```plantuml
-@startuml
-start
-:User inputs roomId, date;
-:UI sends request to BookingService;
-:BookingService fetches bookings from repository;
-:Sort bookings by start time;
-
-if (bookings empty?) then (yes)
-  :Create full-day slot (09:00–22:00);
-  :Return [single slot];
-else (no)
-  :Set startOfDay = 09:00;
-  :Set endOfDay = 22:00;
-  :cursor = startOfDay;
-
-  repeat
-    :Take next booking;
-    if (cursor < booking.start) then (yes)
-      :Add slot [cursor, booking.start];
-    endif
-    :cursor = booking.end;
-  repeat while (more bookings?)
-
-  if (cursor < endOfDay) then (yes)
-    :Add slot [cursor, endOfDay];
-  endif
-endif
-
-:Return list of free slots to UI;
-:UI displays slots to user;
-stop
-@enduml
-```
-</details>
-
 ---
 
 ### US-4: Create Booking
@@ -311,60 +190,10 @@ stop
 ❌ Cannot book in the past
 ```
 
-<details>
-  <summary>**Sequence** (plantUML) </summary>
-
 ![alt text](image-5.png)
 
-```plantuml
-@startuml
-  actor User
-  participant UI
-  participant BookingService as BS
-  participant RoomRepo as RR
-  participant BookingRepo as BR
 
-    User -> UI: book(roomId, start, end)
-    UI -> BS: createBooking(user, roomId, start, end)
-    BS -> RR: findRoom(roomId)
-    RR --> BS: Room
-    BS -> BR: fetchBookings(roomId, date)
-    BR --> BS: bookings
-    BS -> BS: validate time & conflicts
-    alt valid
-      BS -> BR: save(Booking)
-      BR --> BS: Booking(id)
-      BS --> UI: success
-    else invalid
-      BS --> UI: error
-    end
-    UI -> User: show result
-
-@enduml
-```
 ![alt text](image-6.png)
-
-</details>
-
-<details>
-  <summary>**Activity** (plantUML) </summary>
-```plantuml
-@startuml
-  start
-    :Read roomId, start, end;
-    :Validate date (start > now(), end>start);
-    :Check conflicts;
-    if (valid?) then (yes)
-      :Create Booking;
-      :Save to repo;
-      :Show success;
-    else (no)
-      :Show error;
-    endif
-  stop
-@enduml
-```
-</details>
 
 ---
 
@@ -398,19 +227,6 @@ Your bookings:
 
 ![alt text](image-7.png)
 
-<details>
-  <summary>**Activity** (plantUML) </summary>
-```plantuml
-@startuml
-  start
-    :Command my-bookings;
-    :Fetch user's bookings;
-    :Display list with status;
-  stop
-@enduml
-```
-</details>
-
 ---
 
 ### US-6: Cancel Own Booking
@@ -423,45 +239,7 @@ Your bookings:
 ```
 
 ![alt text](image-8.png)
-<details>
-    <summary>**Sequence** (plantUML) </summary>
-```plantuml
-@startuml
-actor User
-participant UI
-participant AuthService as Auth
-participant BookingService as BS
-participant BookingRepo as BR
 
-User -> UI: cancel(bookingId)
-UI -> Auth: getCurrentUser()
-Auth --> UI: User
-UI -> BS: cancelBooking(currentUser, bookingId)
-
-BS -> BR: findBookingById(bookingId)
-alt booking not found
-  BR --> BS: null
-  BS --> UI: error("Booking not found")
-else booking found
-  BR --> BS: Booking
-  BS -> BS: check ownership & status
-  alt not owner
-    BS --> UI: error("Access denied")
-  else already cancelled
-    BS --> UI: error("Already cancelled")
-  else valid
-    BS -> BR: updateStatus(CANCELLED)
-    BR --> BS: ok
-    BS --> UI: success("Booking cancelled")
-  end
-end
-UI -> User: show result
-@enduml
-```
-</details>
-
-<details>
-  <summary> **Activity** (plantUML) </summary>
 ```plantuml
 @startuml
   start
@@ -477,7 +255,6 @@ UI -> User: show result
   stop
 @enduml
 ```
-</details>
 
 ---
 
@@ -493,34 +270,7 @@ ALL BOOKINGS:
 ```
 
 ![alt text](image-10.png)
-<details>
-  <summary> **Sequence** (plantUML) </summary>
-```plantuml
-@startuml
-actor Admin
-participant UI
-participant AuthService as AS
-participant BookingService as BS
-participant BookingRepo as BR
-Admin -> UI: all-bookings
-UI -> AS: verifyRole(admin, ADMIN)
-alt role invalid
-  AS --> UI: Access Denied
-  UI -> Admin: error (Access Denied)
-else role ok
-  AS --> UI: verified
-  UI -> BS: getAllBookings()
-  BS -> BR: fetchAll()
-  BR --> BS: list
-  BS --> UI: list
-  UI -> Admin: display
-end
-@enduml
-```
-</details>
 
-<details>
-  <summary>**Activity** (plantUML) </summary>
 ```plantuml
 @startuml
 start
@@ -535,8 +285,6 @@ endif
 stop
 @enduml
 ```
-</details>
-
 ---
 
 ### US-8: Admin Cancel Any
@@ -550,51 +298,7 @@ stop
 
 ![alt text](image-9.png)
 
-<details>
-  <summary>**Sequence** (plantUml) </summary>
-
-```plantuml
-@startuml
-actor Admin
-participant UI
-participant AuthService as Auth
-participant BookingService as BS
-participant BookingRepo as BR
-
-Admin -> UI: admin-cancel(bookingId)
-UI -> Auth: getCurrentUser()
-Auth --> UI: AdminUser
-UI -> BS: cancelBooking(AdminUser, bookingId)
-
-BS -> BS: checkRole(ADMIN)
-alt not admin
-  BS --> UI: error("Access denied: admin only")
-else ok
-  BS -> BR: findBookingById(bookingId)
-  alt booking not found
-    BR --> BS: null
-    BS --> UI: error("Booking not found")
-  else booking found
-    BR --> BS: Booking
-    BS -> BS: checkStatus(Booking)
-    alt already cancelled
-      BS --> UI: error("Booking already cancelled")
-    else active
-      BS -> BR: updateStatus(CANCELLED, cancelledBy=AdminUser.login)
-      BR --> BS: ok
-      BS --> UI: success("Booking cancelled by admin")
-    end
-  end
-end
-UI -> Admin: show result
-@enduml
-```
-</details>
-
-<details>
-  <summary>**Activity** (plantUML) </summary>
-
-
+** Activity **
 ```plantuml
 @startuml
 start
@@ -610,108 +314,12 @@ endif
 stop
 @enduml
 ```
-<details>
+
 ---
 
 ## 9. Диаграмма классов UI → Service → Repo → Domain
 ![alt text](image-11.png)
 
-<details>
-  <summary> Class diagram </summary>
-```plantuml
-@startuml
-package ui {
-  class ConsoleUI {
-    - authService : AuthService
-    - roomService : RoomService
-    - bookingService : BookingService
-    + handleCommand(cmd: String, args: List<String>) : void
-  }
-}
-
-package service {
-  class AuthService {
-    - userRepo : UserRepository
-    + login(login: String) : Optional<User>
-    + verifyRole(user: User, required: Role) : boolean
-  }
-  class RoomService {
-    - roomRepo : RoomRepository
-    + listRooms() : List<Room>
-  }
-  class BookingService {
-    - bookingRepo : BookingRepository
-    - roomRepo : RoomRepository
-    + createBooking(user: User, roomId: int, start: LocalDateTime, end: LocalDateTime) : Optional<Booking>
-    + cancelBooking(user: User, bookingId: int) : boolean
-    + listBookingsByUser(login: String) : List<Booking>
-    + getAllBookings(user: User) : List<Booking>
-  }
-}
-
-package repository {
-  interface UserRepository {
-    + findUser(login: String) : Optional<User>
-  }
-  interface RoomRepository {
-    + fetchAll() : List<Room>
-    + findRoom(id: int) : Optional<Room>
-  }
-  interface BookingRepository {
-    + fetchAll() : List<Booking>
-    + fetchBookings(roomId: int, date: LocalDate) : List<Booking>
-    + fetchByOwner(owner: String) : List<Booking>
-    + findBookingById(id: int) : Optional<Booking>
-    + save(booking: Booking) : Booking
-    + updateStatus(id: int, status: BookingStatus) : void
-  }
-}
-
-package domain {
-  class User {
-    - login : String
-    - name : String
-    - role : Role
-  }
-  class Room {
-    - id : int
-    - name : String
-    - capacity : int
-    - location : String
-  }
-  class Booking {
-    - id : int
-    - roomId : int
-    - ownerLogin : String
-    - startTime : LocalDateTime
-    - endTime : LocalDateTime
-    - status : BookingStatus
-    - createdAt : LocalDateTime
-    - cancelledBy : String
-  }
-  enum Role {
-		USER,
-		ADMIN
-	}
-
-  enum BookingStatus {
-		ACTIVE,
-		CANCELED
-	}
-}
-
-ConsoleUI --> AuthService
-ConsoleUI --> RoomService
-ConsoleUI --> BookingService
-AuthService --> UserRepository
-RoomService --> RoomRepository
-BookingService --> BookingRepository
-BookingService --> RoomRepository
-Booking --> BookingStatus
-User --> Role
-@enduml
-```
-</details>
 ---
 
 ## 10. Архитектурные заметки
