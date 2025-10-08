@@ -151,22 +151,7 @@ Room A schedule:
 13:00-15:00 free
 ```
 
-```plantuml
-@startuml
-actor User
-participant UI
-participant BookingService as BS
-participant BookingRepo as BR
-
-User -> UI: show-slots(room,date)
-UI -> BS: getAvailable(room,date)
-BS -> BR: fetchBookings(room,date)
-BR --> BS: list<Bookings>
-BS -> BS: calculateFreeSlots(list)
-BS --> UI: list<FreeSlots>
-UI -> User: display
-@enduml
-```
+![alt text](image-13.png)
 
 ![alt text](image-4.png)
 
@@ -202,21 +187,8 @@ UI -> User: display
 Your bookings:
 [42] Room A 2025-10-07 09:00-11:00 ACTIVE
 ```
-```plantuml
-@startuml
-  actor User
-  participant UI
-  participant BookingService as BS
-  participant BookingRepo as BR
 
-    User -> UI: my-bookings
-    UI -> BS: listBookingsByUser(login)
-    BS -> BR: fetchByOwner(login)
-    BR --> BS: list
-    BS --> UI: list
-    UI -> User: display
-@enduml
-```
+![alt text](image-14.png)
 
 ![alt text](image-7.png)
 
@@ -233,21 +205,7 @@ Your bookings:
 
 ![alt text](image-8.png)
 
-```plantuml
-@startuml
-  start
-    :Enter bookingId;
-    :Find booking;
-    :Check owner and status;
-    if (valid?) then (yes)
-      :Cancel booking;
-      :Show success;
-    else (no)
-      :Show error;
-    endif
-  stop
-@enduml
-```
+![alt text](image-15.png)
 
 ---
 
@@ -264,20 +222,7 @@ ALL BOOKINGS:
 
 ![alt text](image-10.png)
 
-```plantuml
-@startuml
-start
-:Command all-bookings;
-:Check if user.role == ADMIN;
-if (admin?) then (yes)
-  :Fetch all bookings;
-  :Display list;
-else (no)
-  :Show access denied;
-endif
-stop
-@enduml
-```
+![alt text](image-16.png)
 ---
 
 ### US-8: Admin Cancel Any
@@ -291,23 +236,7 @@ stop
 
 ![alt text](image-9.png)
 
-** Activity **
-```plantuml
-@startuml
-start
-:Input bookingId;
-:Check if user.role == ADMIN;
-if (admin?) then (yes)
-  :Find booking;
-  :Cancel booking;
-  :Show confirmation;
-else (no)
-  :Show access denied;
-endif
-stop
-@enduml
-```
-
+![alt text](image-17.png)
 ---
 
 ## 9. Диаграмма классов UI → Service → Repo → Domain
