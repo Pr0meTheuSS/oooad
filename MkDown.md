@@ -38,13 +38,9 @@
 #### Sequence (сценарий взаимодействия)
 
  - Читается сверху вниз.
-
  - Actor (пользователь или система) инициирует действие.
-
  - Participant — объекты, через которые проходит запрос (UI, сервис, репозиторий).
-
  - Стрелки показывают вызовы методов, ответы и данные.
-
  - alt / else блоки обозначают альтернативные сценарии (ошибки, недоступные ресурсы, недостаточно прав).
 
 #### Activity (пошаговая логика)
@@ -54,26 +50,21 @@
 #### Class (структура классов)
 
  - Пакеты показывают слои (UI, Service, Repository, Domain).
-
  - Поля и методы указывают на приватные/публичные элементы.
-
  - Стрелки показывают зависимости: кто использует кого.
 
 ### В каком порядке изучать
 
  1. Начать с требований и пользовательских историй (User Stories)
-
  2. Сначала CLI-примеры, чтобы понять, как система выглядит для пользователя.
-
  3. Sequence диаграммы. Показаны шаги взаимодействия и точки принятия решений.
-
  4. Activity диаграммы. Детализируют логику операций, проверку условий и ошибок.
-
  5. Class диаграммы. Объясняют структуру приложения, связи между слоями и роль сервисов.
-
  6. ER диаграмма (если есть). Для понимания структуры данных и связей между сущностями.
 
-### Как делить работу в команде
+
+</details>
+  ### Как делить работу в команде
 Либо по слоям (один пишет UI - обработку команд и вызовы сервисов, второй - бизнес-логику в сервисах, третий - модели и репозитории).
 
 Либо по фичам - один реализует UC1 - UC3, другой UC4-UC6 и тд. (в таком случае будет много конфликтов, скорее всего, но точно все фичи под контролем).
@@ -85,28 +76,24 @@
 #### Frontend / CLI Layer
 
 Реализация команд login, list-rooms, book, cancel и пр.
-
 Отвечает за ввод/вывод, маршрутизацию команд в сервисы.
 
 #### Service Layer
 
 Логика проверки ролей, времени, конфликтов.
-
 Управление сессией, вызов репозиториев.
 
 #### Repository Layer
 
 In-memory хранение данных. (List, HashMap и тд)
-
 Методы для выборки, сохранения и обновления записей.
 
 #### Domain Layer
 
 Сущности User, Room, Booking, Slot
-
 Enum’ы (Role, BookingStatus) и их поведение.
-
 Используйте диаграммы для синхронизации: перед реализацией сверяйтесь, что все ветви сценариев учтены.
+
 ---
 
 ## 2. Acceptance Tests (AT)
@@ -135,7 +122,8 @@ Enum’ы (Role, BookingStatus) и их поведение.
 
 ![alt text](image.png)
 
-**Sequence**:
+<details>
+  <summary>**Sequence** (plantUML)</summary>
 ```plantuml
 @startuml
 actor User
@@ -156,9 +144,12 @@ else not found
 end
 @enduml
 ```
+</details>
 
 ![alt text](image-1.png)
-**Activity**:
+
+<details>
+  <summary>**Activity** (plantUML)</summary>
 ```plantuml
 @startuml
   start
@@ -178,6 +169,7 @@ end
   stop
 @enduml
 ```
+</details>
 
 --- 
 
@@ -191,7 +183,10 @@ ROOMS:
   [3] Room C (capacity 10)
 ```
 ![alt text](image-2.png)
-**Sequence**:
+
+<details>
+  <summary>**Sequence** (plantUML)</summary>
+
 ```plantuml
 @startuml
   actor User
@@ -207,9 +202,11 @@ ROOMS:
     UI -> User: display list
 @enduml
 ```
+</details>
 
 ![alt text](image-3.png)
-**Activity**:
+<details>
+  <summary>**Activity** (plantUML)</summary>
 ```plantuml
 @startuml
   start
@@ -223,6 +220,7 @@ ROOMS:
   stop
 @enduml
 ```
+</details>
 
 --- 
 ### US-3: View Slots 
@@ -237,7 +235,8 @@ Room A schedule:
 13:00-15:00 free
 ```
 
-**Sequence**:
+<details>
+  <summary>**Sequence** (plantUML)</summary>
 ```plantuml
 @startuml
 actor User
@@ -254,10 +253,12 @@ BS --> UI: list<FreeSlots>
 UI -> User: display
 @enduml
 ```
+</details>
 
 ![alt text](image-4.png)
 
-**Activity**:
+<details>
+  <summary> **Activity** (plantUML) </summary>
 ```plantuml
 @startuml
 start
@@ -292,6 +293,8 @@ endif
 stop
 @enduml
 ```
+</details>
+
 ---
 
 ### US-4: Create Booking
@@ -308,7 +311,8 @@ stop
 ❌ Cannot book in the past
 ```
 
-**Sequence**:
+<details>
+  <summary>**Sequence** (plantUML) </summary>
 
 ![alt text](image-5.png)
 
@@ -338,11 +342,12 @@ stop
 
 @enduml
 ```
-
-**Activity**:
-
 ![alt text](image-6.png)
 
+</details>
+
+<details>
+  <summary>**Activity** (plantUML) </summary>
 ```plantuml
 @startuml
   start
@@ -359,6 +364,7 @@ stop
   stop
 @enduml
 ```
+</details>
 
 ---
 
@@ -371,9 +377,8 @@ stop
 Your bookings:
 [42] Room A 2025-10-07 09:00-11:00 ACTIVE
 ```
-
-**Sequence**:
-
+<details>
+    <summary> **Sequence** (plantUML) </summary>
 ```plantuml
 @startuml
   actor User
@@ -389,10 +394,12 @@ Your bookings:
     UI -> User: display
 @enduml
 ```
+</details>
 
-**Activity**:
 ![alt text](image-7.png)
 
+<details>
+  <summary>**Activity** (plantUML) </summary>
 ```plantuml
 @startuml
   start
@@ -402,6 +409,7 @@ Your bookings:
   stop
 @enduml
 ```
+</details>
 
 ---
 
@@ -414,9 +422,9 @@ Your bookings:
 ✅ Booking 42 cancelled
 ```
 
-**Sequence**:
-
 ![alt text](image-8.png)
+<details>
+    <summary>**Sequence** (plantUML) </summary>
 ```plantuml
 @startuml
 actor User
@@ -450,9 +458,10 @@ end
 UI -> User: show result
 @enduml
 ```
+</details>
 
-**Activity**:
-
+<details>
+  <summary> **Activity** (plantUML) </summary>
 ```plantuml
 @startuml
   start
@@ -468,6 +477,7 @@ UI -> User: show result
   stop
 @enduml
 ```
+</details>
 
 ---
 
@@ -482,9 +492,9 @@ ALL BOOKINGS:
 [43] Room B by bob CANCELLED
 ```
 
-**Sequence**:
 ![alt text](image-10.png)
-
+<details>
+  <summary> **Sequence** (plantUML) </summary>
 ```plantuml
 @startuml
 actor Admin
@@ -507,9 +517,10 @@ else role ok
 end
 @enduml
 ```
+</details>
 
-**Activity**:
-
+<details>
+  <summary>**Activity** (plantUML) </summary>
 ```plantuml
 @startuml
 start
@@ -524,6 +535,7 @@ endif
 stop
 @enduml
 ```
+</details>
 
 ---
 
@@ -536,9 +548,10 @@ stop
 ✅ Booking 42 cancelled by admin
 ```
 
-**Sequence**:
-
 ![alt text](image-9.png)
+
+<details>
+  <summary>**Sequence** (plantUml) </summary>
 
 ```plantuml
 @startuml
@@ -576,8 +589,11 @@ end
 UI -> Admin: show result
 @enduml
 ```
+</details>
 
-**Activity**:
+<details>
+  <summary>**Activity** (plantUML) </summary>
+
 
 ```plantuml
 @startuml
@@ -594,12 +610,14 @@ endif
 stop
 @enduml
 ```
-
+<details>
 ---
 
 ## 9. Диаграмма классов UI → Service → Repo → Domain
 ![alt text](image-11.png)
 
+<details>
+  <summary> Class diagram </summary>
 ```plantuml
 @startuml
 package ui {
@@ -693,7 +711,7 @@ Booking --> BookingStatus
 User --> Role
 @enduml
 ```
-
+</details>
 ---
 
 ## 10. Архитектурные заметки
