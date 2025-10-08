@@ -63,7 +63,6 @@
  6. ER диаграмма (если есть). Для понимания структуры данных и связей между сущностями.
 
 
-</details>
   ### Как делить работу в команде
 Либо по слоям (один пишет UI - обработку команд и вызовы сервисов, второй - бизнес-логику в сервисах, третий - модели и репозитории).
 
@@ -152,8 +151,6 @@ Room A schedule:
 13:00-15:00 free
 ```
 
-<details>
-  <summary>**Sequence** (plantUML)</summary>
 ```plantuml
 @startuml
 actor User
@@ -170,7 +167,6 @@ BS --> UI: list<FreeSlots>
 UI -> User: display
 @enduml
 ```
-</details>
 
 ![alt text](image-4.png)
 
@@ -206,8 +202,6 @@ UI -> User: display
 Your bookings:
 [42] Room A 2025-10-07 09:00-11:00 ACTIVE
 ```
-<details>
-    <summary> **Sequence** (plantUML) </summary>
 ```plantuml
 @startuml
   actor User
@@ -223,7 +217,6 @@ Your bookings:
     UI -> User: display
 @enduml
 ```
-</details>
 
 ![alt text](image-7.png)
 
